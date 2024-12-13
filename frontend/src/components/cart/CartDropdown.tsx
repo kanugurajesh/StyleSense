@@ -8,9 +8,7 @@ export function CartDropdown() {
 
   if (items.length === 0) {
     return (
-      <div className="p-4 text-center text-gray-500">
-        Your cart is empty
-      </div>
+      <div className="p-4 text-center text-gray-500">Your cart is empty</div>
     );
   }
 
@@ -41,9 +39,7 @@ export function CartDropdown() {
           <span>Total:</span>
           <span className="font-medium">${total.toFixed(2)}</span>
         </div>
-        <Button className="w-full">
-          Checkout
-        </Button>
+        <Button className="w-full">Checkout</Button>
       </div>
     </div>
   );

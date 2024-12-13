@@ -13,7 +13,7 @@ export const mockProducts: Product[] = [
   {
     id: '2',
     name: 'Denim Jacket',
-    brand: 'Levi\'s',
+    brand: "Levi's",
     price: 89.99,
     image: 'https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9',
     category: 'outerwear',

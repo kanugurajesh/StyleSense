@@ -1,4 +1,3 @@
-import React from 'react';
 import { Header } from './components/Header';
 import { RecommendationSection } from './components/RecommendationSection';
 import { CartProvider } from './context/CartContext';

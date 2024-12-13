@@ -20,7 +20,7 @@ export function Header() {
           <div className="flex-shrink-0">
             <h1 className="text-2xl font-bold">StyleSense</h1>
           </div>
-          
+
           <div className="flex-1 max-w-2xl mx-8">
             <SearchInput />
           </div>

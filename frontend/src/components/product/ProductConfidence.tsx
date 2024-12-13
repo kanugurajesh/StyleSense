@@ -13,9 +13,9 @@ export function ProductConfidence({ confidence }: ProductConfidenceProps) {
 
   return (
     <div className="mt-1 flex items-center gap-1">
-      <div 
-        className={`h-2 rounded ${getConfidenceColor(confidence)}`} 
-        style={{ width: `${confidence}%` }} 
+      <div
+        className={`h-2 rounded ${getConfidenceColor(confidence)}`}
+        style={{ width: `${confidence}%` }}
       />
       <span className="text-xs text-gray-500">{confidence}% match</span>
     </div>

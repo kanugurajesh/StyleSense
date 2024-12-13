@@ -32,7 +32,9 @@ export function ProductCard({ product }: ProductCardProps) {
           <h3 className="text-sm text-gray-700">{product.name}</h3>
           <Badge variant="info">{product.brand}</Badge>
         </div>
-        <p className="text-sm font-medium text-gray-900">${product.price.toFixed(2)}</p>
+        <p className="text-sm font-medium text-gray-900">
+          ${product.price.toFixed(2)}
+        </p>
         <ProductConfidence confidence={product.confidence} />
       </div>
     </div>

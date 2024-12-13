@@ -8,7 +8,9 @@ interface ProductImageProps {
 
 export function ProductImage({ src, alt, className = '' }: ProductImageProps) {
   return (
-    <div className={`aspect-square overflow-hidden rounded-lg bg-gray-200 ${className}`}>
+    <div
+      className={`aspect-square overflow-hidden rounded-lg bg-gray-200 ${className}`}
+    >
       <img
         src={src}
         alt={alt}
