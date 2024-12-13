@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+tensorflow
+numpy
+scikit-learn
+Pillow
+tqdm
+pandas
+opencv-python
