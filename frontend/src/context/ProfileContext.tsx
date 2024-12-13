@@ -82,10 +82,12 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
     setProfile((prev) => {
       if (!prev) return null;
       const updatedPreferences = { ...prev.preferences, ...preferences };
+      const newScore = calculatePersonalizationScore(updatedPreferences, prev.lastInteractions);
+      
       return {
         ...prev,
         preferences: updatedPreferences,
-        personalizationScore: calculatePersonalizationScore(updatedPreferences),
+        personalizationScore: newScore,
       };
     });
   };
@@ -99,13 +101,13 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
         case 'view':
           lastInteractions.viewedProducts = [
             value,
-            ...lastInteractions.viewedProducts.slice(0, 19), // Keep last 20
+            ...lastInteractions.viewedProducts.filter((id) => id !== value).slice(0, 19),
           ];
           break;
         case 'search':
           lastInteractions.searchQueries = [
             value,
-            ...lastInteractions.searchQueries.slice(0, 9), // Keep last 10
+            ...lastInteractions.searchQueries.filter((q) => q !== value).slice(0, 9),
           ];
           break;
         case 'category':
@@ -114,10 +116,12 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
           break;
       }
 
+      const newScore = calculatePersonalizationScore(prev.preferences, lastInteractions);
+
       return {
         ...prev,
         lastInteractions,
-        personalizationScore: calculatePersonalizationScore(prev.preferences, lastInteractions),
+        personalizationScore: newScore,
       };
     });
   };
@@ -128,19 +132,40 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
     interactions?: UserProfile['lastInteractions']
   ) => {
     let score = 0;
+    const weights = {
+      styles: 0.2,
+      brands: 0.15,
+      colors: 0.15,
+      sizes: 0.15,
+      priceRange: 0.1,
+      viewHistory: 0.15,
+      searchHistory: 0.1,
+    };
     
     // Preference completeness
-    score += preferences.favoriteStyles.length ? 0.2 : 0;
-    score += preferences.preferredBrands.length ? 0.2 : 0;
-    score += preferences.colorPreferences.length ? 0.2 : 0;
+    score += (preferences.favoriteStyles.length / 3) * weights.styles; // Expect at least 3 styles
+    score += (preferences.preferredBrands.length / 3) * weights.brands; // Expect at least 3 brands
+    score += (preferences.colorPreferences.length / 3) * weights.colors; // Expect at least 3 colors
+    
+    // Size preferences
+    const hasSizes = Object.values(preferences.sizePreferences).filter(Boolean).length;
+    score += (hasSizes / 3) * weights.sizes; // All three size types filled
+    
+    // Price range
+    if (preferences.priceRange.min < preferences.priceRange.max) {
+      score += weights.priceRange;
+    }
     
     // Interaction depth
     if (interactions) {
-      score += Math.min(interactions.viewedProducts.length / 20, 1) * 0.2;
-      score += Math.min(Object.keys(interactions.categoryInteractions).length / 5, 1) * 0.2;
+      // View history (max 20 items)
+      score += Math.min(interactions.viewedProducts.length / 20, 1) * weights.viewHistory;
+      
+      // Search history (max 10 searches)
+      score += Math.min(interactions.searchQueries.length / 10, 1) * weights.searchHistory;
     }
     
-    return score;
+    return Math.min(Math.max(score, 0), 1); // Ensure score is between 0 and 1
   };
 
   return (
