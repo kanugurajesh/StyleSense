@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { LogOut, Settings, User } from 'lucide-react';
+import { LogOut, Settings, User, Settings2, X } from 'lucide-react';
 import { useProfile } from '../../context/ProfileContext';
 import { Button } from '../ui/Button';
+import { PreferencesForm } from './PreferencesForm';
 
 interface LoginFormProps {
   onSubmit: (email: string, password: string) => Promise<void>;
@@ -51,9 +52,28 @@ function LoginForm({ onSubmit }: LoginFormProps) {
 
 export function ProfileDropdown() {
   const { profile, isLoggedIn, login, logout } = useProfile();
+  const [showPreferences, setShowPreferences] = useState(false);
 
   if (!isLoggedIn) {
     return <LoginForm onSubmit={login} />;
+  }
+
+  if (showPreferences) {
+    return (
+      <div className="w-96">
+        <div className="p-4 border-b flex justify-between items-center">
+          <h2 className="font-medium">Style Preferences</h2>
+          <Button
+            variant="ghost"
+            className="p-1"
+            onClick={() => setShowPreferences(false)}
+          >
+            <X className="w-4 h-4" />
+          </Button>
+        </div>
+        <PreferencesForm />
+      </div>
+    );
   }
 
   return (
@@ -78,6 +98,30 @@ export function ProfileDropdown() {
         </div>
       </div>
       <div className="p-2">
+        {profile && (
+          <div className="px-2 py-1 mb-2">
+            <div className="text-sm text-gray-500">Personalization Score</div>
+            <div className="flex items-center gap-2">
+              <div className="flex-1 h-2 bg-gray-200 rounded-full">
+                <div
+                  className="h-2 bg-blue-500 rounded-full"
+                  style={{ width: `${profile.personalizationScore * 100}%` }}
+                />
+              </div>
+              <span className="text-sm text-gray-700">
+                {Math.round(profile.personalizationScore * 100)}%
+              </span>
+            </div>
+          </div>
+        )}
+        <Button
+          variant="ghost"
+          className="w-full justify-start gap-2 p-2 mb-1"
+          onClick={() => setShowPreferences(true)}
+        >
+          <Settings2 className="w-4 h-4" />
+          Style Preferences
+        </Button>
         <Button
           variant="ghost"
           className="w-full justify-start gap-2 p-2 mb-1"
