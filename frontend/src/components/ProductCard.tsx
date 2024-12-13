@@ -4,8 +4,8 @@ import { ProductImage } from './product/ProductImage';
 import { ProductActions } from './product/ProductActions';
 import { ProductConfidence } from './product/ProductConfidence';
 import { Badge } from './ui/Badge';
-import { useCart } from '../hooks/useCart';
-import { useFavorites } from '../hooks/useFavorites';
+import { useCart } from '../context/CartContext';
+import { useFavorites } from '../context/FavoritesContext';
 
 interface ProductCardProps {
   product: Product;
@@ -15,11 +15,15 @@ export function ProductCard({ product }: ProductCardProps) {
   const { addToCart } = useCart();
   const { toggleFavorite, isFavorite } = useFavorites();
 
+  const handleAddToCart = () => {
+    addToCart(product);
+  };
+
   return (
     <div className="group relative">
       <ProductImage src={product.image} alt={product.name} />
       <ProductActions
-        onAddToCart={() => addToCart(product)}
+        onAddToCart={handleAddToCart}
         onToggleFavorite={() => toggleFavorite(product.id)}
         isFavorite={isFavorite(product.id)}
       />
@@ -28,7 +32,7 @@ export function ProductCard({ product }: ProductCardProps) {
           <h3 className="text-sm text-gray-700">{product.name}</h3>
           <Badge variant="info">{product.brand}</Badge>
         </div>
-        <p className="text-sm font-medium text-gray-900">${product.price}</p>
+        <p className="text-sm font-medium text-gray-900">${product.price.toFixed(2)}</p>
         <ProductConfidence confidence={product.confidence} />
       </div>
     </div>

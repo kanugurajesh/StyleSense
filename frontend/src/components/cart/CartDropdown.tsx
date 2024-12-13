@@ -23,7 +23,12 @@ export function CartDropdown() {
           />
           <div className="flex-1">
             <h3 className="text-sm font-medium">{item.name}</h3>
-            <p className="text-sm text-gray-500">${item.price.toFixed(2)}</p>
+            <p className="text-sm text-gray-500">
+              ${item.price.toFixed(2)} × {item.quantity}
+            </p>
+            <p className="text-sm font-medium">
+              ${(item.price * item.quantity).toFixed(2)}
+            </p>
           </div>
           <Button
             variant="ghost"
