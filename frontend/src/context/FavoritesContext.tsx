@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useState } from 'react';
+import type { Product } from '../types';
 
 interface FavoritesContextType {
-  favorites: Set<string>;
-  toggleFavorite: (productId: string) => void;
+  favorites: Product[];
+  toggleFavorite: (product: Product) => void;
   isFavorite: (productId: string) => boolean;
+  favoriteCount: number;
 }
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(
@@ -11,18 +13,21 @@ const FavoritesContext = createContext<FavoritesContextType | undefined>(
 );
 
 export function FavoritesProvider({ children }: { children: React.ReactNode }) {
-  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [favorites, setFavorites] = useState<Product[]>([]);
 
-  const toggleFavorite = (productId: string) => {
+  const toggleFavorite = (product: Product) => {
     setFavorites((prev) => {
-      const next = new Set(prev);
-      if (next.has(productId)) {
-        next.delete(productId);
+      const exists = prev.some((item) => item.id === product.id);
+      if (exists) {
+        return prev.filter((item) => item.id !== product.id);
       } else {
-        next.add(productId);
+        return [...prev, product];
       }
-      return next;
     });
+  };
+
+  const isFavorite = (productId: string) => {
+    return favorites.some((item) => item.id === productId);
   };
 
   return (
@@ -30,7 +35,8 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
       value={{
         favorites,
         toggleFavorite,
-        isFavorite: (productId: string) => favorites.has(productId),
+        isFavorite,
+        favoriteCount: favorites.length,
       }}
     >
       {children}

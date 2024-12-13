@@ -24,7 +24,7 @@ export function ProductCard({ product }: ProductCardProps) {
       <ProductImage src={product.image} alt={product.name} />
       <ProductActions
         onAddToCart={handleAddToCart}
-        onToggleFavorite={() => toggleFavorite(product.id)}
+        onToggleFavorite={() => toggleFavorite(product)}
         isFavorite={isFavorite(product.id)}
       />
       <div className="mt-4">
