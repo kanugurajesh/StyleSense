@@ -142,3 +142,6 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Contact
 For any inquiries, please contact: [your-email@example.com](mailto:your-email@example.com)
+
+![stanley](https://github.com/user-attachments/assets/faab3ba8-513e-4a16-badc-6e859884afc3)
+![stanley-me](https://github.com/user-attachments/assets/034a34f7-d170-4300-9028-6ebc47d00411)
